@@ -1,0 +1,26 @@
+# Description: ALSA utils
+# URL:         http://www.alsa-project.org/
+# Depends on:  gettext alsa-lib dialog
+
+name=alsa-utils
+version=1.2.4
+release=1
+source=(ftp://ftp.alsa-project.org/pub/utils/$name-$version.tar.bz2 \
+	alsa.rc)
+
+build() {
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr \
+		--disable-bat \
+		--disable-nls \
+		--disable-xmlto
+
+	make V=1
+	make DESTDIR=$PKG install
+
+	install -Dm0755 $SRC/alsa.rc $PKG/etc/rc.d/alsa
+
+	rm -r $PKG/usr/share/man/{fr,man7}
+}

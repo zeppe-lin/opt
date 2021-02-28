@@ -1,0 +1,23 @@
+# Description: Sophisticated command line based FTP client
+# URL:         https://lftp.yar.ru/
+# Depends on:  openssl
+
+name=lftp
+version=4.9.2
+release=1
+source=(https://lftp.yar.ru/ftp/lftp-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr \
+		--disable-nls \
+		--with-openssl=/usr \
+		--sysconfdir=/usr/etc
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/lib
+}

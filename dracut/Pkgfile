@@ -1,0 +1,33 @@
+# Description: Low-level tool for generating an initramfs/initrd image
+# URL:         https://dracut.wiki.kernel.org/index.php/Main_Page
+# Depends on:  kmod
+
+name=dracut
+version=051
+release=1
+source=(https://mirrors.edge.kernel.org/pub/linux/utils/boot/$name/$name-$version.tar.xz
+	10-zpln.conf arch installkernel)
+
+build() {
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr     \
+		--sysconfdir=/etc \
+
+	make
+	make DESTDIR=$PKG install
+
+	# initramfs config
+	cp $SRC/10-zpln.conf $PKG/etc/dracut.conf.d/
+
+	# kernel install script
+	install -Dm 0755 $SRC/installkernel $PKG/sbin/installkernel
+
+	# XXX hotfix
+	# "/usr/lib/dracut/modules.d/90crypt/module-setup.sh:
+	#  line 28: arch: command not found"
+	install -Dm0755 $SRC/arch $PKG/bin/arch
+
+	rm $PKG/usr/lib/$name/modules.d/*/README*
+}

@@ -1,0 +1,17 @@
+# Description: manipulate efi boot managers
+# URL:         http://linux.dell.com/efibootmgr/
+# Depends on:  efivar
+
+name=efibootmgr
+version=17
+release=1
+#source=(https://github.com/rhinstaller/$name/releases/download/$version/$name-$version.tar.bz2)
+source=(https://github.com/rhboot/efibootmgr/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	sed -e '/extern int efi_set_verbose/d' -i src/efibootmgr.c
+	EFIDIR=/boot/efi make
+	install -D src/efibootmgr $PKG/usr/sbin/efibootmgr
+	install -D src/efibootmgr.8 $PKG/usr/share/man/man8/efibootmgr.8
+}

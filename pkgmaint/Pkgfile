@@ -1,0 +1,14 @@
+# Description: Additional package maintaining tools
+# URL:         https://github.com/zeppe-lin/pkgmaint
+# Depends on:  pkgman
+
+name=pkgmaint
+version=0.1337-6009e24
+release=1
+source=(https://github.com/zeppe-lin/$name/archive/${version##*-}/$name-${version##*-}.tar.gz)
+
+build() {
+	cd $name-${version##*-}*
+
+	make PREFIX=/usr DESTDIR=$PKG install
+}

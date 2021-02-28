@@ -1,0 +1,15 @@
+# Description: A tool to display dialog boxes from shell scripts
+# URL:         https://invisible-island.net/dialog/
+# Depends on:  ncurses
+
+name=dialog
+version=1.3-20210117
+release=1
+source=(https://invisible-mirror.net/archives/$name/$name-$version.tgz)
+
+build () {
+	cd $name-$version
+	./configure --prefix=/usr --with-ncursesw
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# /etc/rc.d/sdhcp: start/stop dhcp client daemon
+#
+
+DEV=wlp1s0
+
+case $1 in
+start)
+	/sbin/sdhcp -i $DEV
+	;;
+stop)
+	killall -q /sbin/sdhcp
+	;;
+restart)
+	$0 stop
+	sleep 2
+	$0 start
+	;;
+*)
+	echo "usage: $0 [start|stop|restart]"
+	;;
+esac
+
+# End of file

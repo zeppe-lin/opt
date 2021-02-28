@@ -1,0 +1,25 @@
+#!/bin/sh -e
+#
+# /etc/rc.d/dbus: start/stop dbus messagebus daemon
+#
+
+case $1 in
+start)
+	[ -f /var/lib/dbus/machine-id ] || /usr/bin/dbus-uuidgen --ensure
+	/usr/sbin/dbus-daemon --system
+	;;
+stop)
+	killall -q /usr/sbin/dbus-daemon
+	rm -f /var/run/dbus.pid
+	;;
+restart)
+	$0 stop
+	sleep 2
+	$0 start
+	;;
+*)
+	echo "usage: $0 [start|stop|restart]"
+	;;
+esac
+
+# End of file.

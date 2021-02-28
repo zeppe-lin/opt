@@ -1,0 +1,56 @@
+README for dracut
+
+
+KERNEL CONFIGURATION FOR ENCRYPTED ROOT
+
+  !!! cryptsetup need to be installed !!!
+
+  General Setup --->
+    [*] Initial RAM filesystem and RAM disk (iniramfs/initrd) support
+
+  Device Drivers --->
+    Multiple devices driver support (RAID and LVM) --->
+      [*] Device mapper support
+      [*] Crypt target support
+
+  Cryptographic API --->
+    <*> XTS support
+    <*> SHA224 and SHA256 digest algorithm
+    <*> AES cipher algorithms
+    <*> AES cipher algorithms (x86_64)
+    <*> User-space interface for hash algorithms
+    <*> User-space interface for symmetric key cipher algorithms    
+
+
+POST-INSTALL
+
+  1. Install grub2 into the ESP (if it's not already installed):
+
+     # grub-install --efi-directory=/boot --recheck
+
+  2. Generate an initramfs image:
+
+     # dracut -q --kver 5.2.17 /boot/initramfs-5.2.17.img
+
+     Or if you have a swap partition and want to use it for
+     `resume from hibernate` try this:
+
+     # dracut -q --kver 5.2.17 --add-device /dev/mapper/crux-swap \
+        /boot/initramfs-5.2.17.img
+
+  3. Generate a grub2 configuration file:
+
+     # grub-mkconfig -o /boot/grub/grub.cfg
+
+
+NOTES
+
+  The source package also provides the installkernel script, that
+  can be used by 'make install' in the kernel tree. It copies the
+  kernel to the /boot, makes a backup, generates and init ramdisk,
+  and generates a grub2 configuration file. So it's not necessary
+  to do manually postinstall actions after every kernel update.
+  See /sbin/installkernel for info.
+
+
+End of file.

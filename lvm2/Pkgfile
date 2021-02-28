@@ -1,0 +1,44 @@
+# Description: Userspace toolset for logical volume management
+# URL:         http://sourceware.org/lvm2
+# Depends on:  libdevmapper libaio
+
+name=lvm2
+version=2.02.187
+release=1
+source=(https://mirrors.kernel.org/sourceware/lvm2/LVM2.$version.tgz)
+
+build() {
+	cd LVM2.$version
+
+	sed 's/$(INSTALL) -p /$(INSTALL) /g' -i make.tmpl.in
+
+	# needed for static linking
+	export LIBS="-lpthread -luuid -lm"
+
+	CONFIG_SHELL=/bin/bash \
+	./configure \
+		--prefix=/usr             \
+		--exec-prefix=            \
+		--datarootdir=/usr        \
+		--mandir=/usr/share/man   \
+		--with-udev-prefix=       \
+		--disable-readline        \
+		--disable-selinux         \
+		--enable-pkgconfig        \
+		--enable-static_link      \
+		--enable-udev_sync        \
+		--enable-udev_rules       \
+		--with-{user,group}=root  \
+
+	make V=1
+	make DESTDIR=$PKG install_lvm2
+
+	install -d $PKG/etc/lvm/{archive,backup,cache}
+	chmod 0700 $PKG/etc/lvm/{archive,backup,cache}
+
+	install -d $PKG/var/lock
+	chmod 1777 $PKG/var/lock
+
+	install -d $PKG/var/lock/lvm
+	chmod 0700 $PKG/var/lock/lvm
+}

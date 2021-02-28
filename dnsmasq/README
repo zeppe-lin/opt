@@ -1,0 +1,13 @@
+README for dnsmasq
+
+
+KERNEL CONFIGURATION
+
+  For the DHCP server part of dnsmasq you need the following kernel
+  networking options:
+
+   - Packet sockets
+   - Socket filtering
+
+
+End of file.

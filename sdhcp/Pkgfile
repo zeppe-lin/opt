@@ -1,0 +1,17 @@
+# Description: Simple DHCP Client
+# URL:         https://github.com/zeppe-lin/sdhcp
+
+name=sdhcp
+version=0.1-5f9956c
+release=1
+source=(https://github.com/zeppe-lin/$name/archive/${version##*-}/$name-${version##*-}.tar.gz
+	$name.rc)
+
+build() {
+	cd $name-${version##*-}*
+
+	sed -i -e '/^LDFLAGS/d' -e '/^CFLAGS/s/=/+=/' config.mk
+
+	make DESTDIR=$PKG PREFIX= MANPREFIX=/usr/share/man install
+	install -Dm0755 $SRC/$name.rc $PKG/etc/rc.d/$name
+}

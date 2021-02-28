@@ -1,0 +1,10 @@
+README for elilo
+
+
+KERNEL CONFIGURATION
+
+  For eliloalt to work you have to enable CONFIG_EFI_VARS in your
+  kernel config.
+
+
+End of file.
