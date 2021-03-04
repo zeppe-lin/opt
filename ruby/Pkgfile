@@ -3,18 +3,19 @@
 # Depends on:  gdbm libgmp openssl zlib libffi libyaml
 
 name=ruby
-version=3.0.0
+version=2.7.2
 release=1
 source=(http://cache.ruby-lang.org/pub/$name/${version%.*}/$name-$version.tar.xz)
 
 build () {
-    cd $name-$version
+	cd $name-$version
 
-    ./configure --prefix=/usr \
-                --enable-shared \
-                --disable-install-doc \
-                --with-ruby-version=minor
+	./configure \
+		--prefix=/usr             \
+		--enable-shared           \
+		--disable-install-doc     \
+		--with-ruby-version=minor \
 
-    make
-    make DESTDIR=$PKG install
+	make
+	make DESTDIR=$PKG install
 }
