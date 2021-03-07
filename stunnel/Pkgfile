@@ -8,26 +8,28 @@ release=1
 source=(https://www.stunnel.org/downloads/$name-$version.tar.gz \
         $name.conf $name)
 
-build () {
-    cd $name-$version
+build() {
+	cd $name-$version
 
-    ./configure --prefix=/usr \
-                --sysconfdir=/etc \
-                --localstatedir=/var \
-                --with-ssl=/usr \
-                --disable-{fips,systemd,libwrap} \
-                --enable-ipv6
-    make
+	./configure \
+		--prefix=/usr                    \
+		--sysconfdir=/etc                \
+		--localstatedir=/var             \
+		--with-ssl=/usr                  \
+		--disable-{fips,systemd,libwrap} \
+		--enable-ipv6                    \
 
-    install -D -m 0755 src/stunnel $PKG/usr/sbin/stunnel
-    install -D -m 0644 doc/stunnel.8 $PKG/usr/share/man/man8/stunnel.8
-    install -D -m 0755 $SRC/stunnel  $PKG/etc/rc.d/stunnel
-    install -D -m 0644 $SRC/stunnel.conf $PKG/etc/stunnel.conf
+	make V=1
 
-    install -d $PKG/var/run
-    install -d -m 770 -o stunnel -g stunnel $PKG/var/run/stunnel
-    
-    install -d $PKG/etc/ssl/{certs,keys}
-    touch $PKG/etc/ssl/{certs/stunnel.crt,keys/stunnel.key}
-    chmod 0600 $PKG/etc/ssl/keys/stunnel.key
+	install -D -m 0755 src/stunnel       $PKG/usr/sbin/stunnel
+	install -D -m 0644 doc/stunnel.8     $PKG/usr/share/man/man8/stunnel.8
+	install -D -m 0755 $SRC/stunnel      $PKG/etc/rc.d/stunnel
+	install -D -m 0644 $SRC/stunnel.conf $PKG/etc/stunnel.conf
+
+	install -d $PKG/var/run
+	install -d -m 770 $PKG/var/run/stunnel
+
+	install -d $PKG/etc/ssl/{certs,keys}
+	touch $PKG/etc/ssl/{certs/stunnel.crt,keys/stunnel.key}
+	chmod 0600 $PKG/etc/ssl/keys/stunnel.key
 }
