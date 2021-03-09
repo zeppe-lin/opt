@@ -1,20 +1,21 @@
-# Description: tools for creating and checking DOS filesystems in linux
-# URL: https://github.com/dosfstools/dosfstools
+# Description: Create and check DOS filesystems
+# URL:         https://github.com/dosfstools/dosfstools
 
 name=dosfstools
-version=4.1
+version=4.2
 release=1
-source=(https://github.com/dosfstools/dosfstools/releases/download/v$version/$name-$version.tar.xz)
+source=(https://github.com/$name/$name/releases/download/v$version/$name-$version.tar.gz)
 
 build() {
-  cd $name-$version
+	cd $name-$version
 
-  ./configure --prefix=/usr \
-              --sbindir=/sbin \
-              --enable-compat-symlinks
+	./configure \
+		--prefix=/usr            \
+		--sbindir=/sbin          \
+		--enable-compat-symlinks \
 
-  make
-  make DESTDIR=$PKG install
+	make V=1
+	make DESTDIR=$PKG install
 
-  rm -r $PKG/usr/share/doc
+	rm -r $PKG/usr/share/doc
 }
