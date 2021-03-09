@@ -3,7 +3,7 @@
 # Depends on:  lzo zstd
 
 name=btrfs-progs
-version=5.10
+version=5.11
 release=1
 source=(https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v$version.tar.xz)
 
@@ -11,17 +11,17 @@ build() {
 	cd $name-v$version
 
 	./configure \
-		--prefix=/usr \
-		--bindir=/sbin \
+		--prefix=/usr           \
+		--bindir=/sbin          \
 		--disable-documentation \
-		--disable-convert \
-		--disable-python
-	make
+		--disable-convert       \
+		--disable-python        \
+
+	make V=1
 	make DESTDIR=$PKG install
 
-	install -d  $PKG/usr/share/man/{man5,man8}
-	install -m644 Documentation/*.5 $PKG/usr/share/man/man5/
-	install -m644 Documentation/*.8 $PKG/usr/share/man/man8/
+	install -m 644 -D -t $PKG/usr/share/man/man8 Documentation/*.8
+	install -m 644 -D -t $PKG/usr/share/man/man5 Documentation/*.5
 
 	#btrfs-convert disabled
 	rm $PKG/usr/share/man/man8/btrfs-convert.8
