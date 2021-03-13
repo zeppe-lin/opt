@@ -3,14 +3,14 @@
 # Depends on:  cmake libxml2 ninja
 
 name=llvm
-version=11.0.1
+version=11.1.0
 release=1
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/llvm-$version.src.tar.xz
 	llvm-config.h)
 
 build() {
-	export CC=gcc
-	export CXX=g++
+	export CC=${CC:-gcc}
+	export CXX=${CXX:-g++}
 
 	cmake -S $name-$version.src -B build -G Ninja \
 		-D CMAKE_INSTALL_PREFIX=/usr \
@@ -29,7 +29,7 @@ build() {
 		-D LLVM_INSTALL_UTILS=1 \
 		-Wno-dev
 
-	cmake --build build
+	cmake --build build -v
 	DESTDIR=$PKG cmake --install build
 
 	# multilib stub
